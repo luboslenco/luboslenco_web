@@ -33,7 +33,7 @@
 	    		<description>
 		<p style="font-size: 12px; text-align: right">Dec 22, 2024</p>
 		Had fun improving the path-tracing renderer. Can handle fully dynamic scenes now.
-		<br><br><img src="img/000.jpg" width="320">
+		<br/><br/><img src="img/000.jpg" width="320"/>
 	
 	    		</description>
 			</item>

@@ -41,7 +41,7 @@
 			background-color: #333;
 		}
 	</style>
-	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+	<script src="https://forums.armorpaint.org/javascripts/embed-topics.js"></script>
 </head>
 <body>
 
@@ -66,96 +66,11 @@
 			});
 		</script>
 		<a href="https://luboslenco.com/rss.xml" target="_blank"><button type="button">RSS</button></a>
-		<button id="toggle_comments" type="button">Comments</button>
 	</div>
 
-	<!-------------------------------------->
-
-	<div id="comment_wrapper" style="display: none;">
-		<textarea id="comment_text" placeholder="Write a comment..."
-			style="width: 100%; height: 80px;
-				background-color: #000; color: #fff;
-				border: 1px solid #444; outline: none; font-size: 16px; font-family: inherit;"></textarea>
-		<div class="cf-turnstile" data-sitekey="0x4AAAAAACav7T_3GF2fi21m" data-theme="dark"></div>
-		<button type="button" id="comment_button" style="margin-top: 10px; cursor: pointer; padding: 10px 20px;">
-			Post
-		</button>
-		<div id="comments_list">
-			Loading comments...
-		</div>
+	<div style="background-color: #000;">
+		<d-topics-list discourse-url="https://forums.armorpaint.org" category="releases" per-page="5"></d-topics-list>
 	</div>
-
-	<!-------------------------------------->
-
-	<div id="rss">
-		<p style="font-size: 13px; text-align: right;">Feb 13, 2026</p>
-		Log started.
-	</div>
-
-	<!-------------------------------------->
-
-	<div id="rss">
-		<p style="font-size: 13px; text-align: right">Mar 20, 2025</p>
-		Learning about <a href="https://github.com/Kode/Kongruent">Kongruent</a> - shader lang and cross-compiler. Another incredible library by robdangerous.
-	</div>
-
-	<!-------------------------------------->
-
-	<div id="rss">
-		<p style="font-size: 13px; text-align: right">Dec 22, 2024</p>
-		Had fun improving the path-tracing renderer. Can handle fully dynamic scenes now.
-		<br/><br/><img src="img/000.jpg" width="320"/>
-	</div>
-
-	<!-------------------------------------->
-
-	<script>
-		document.getElementById('comment_button').addEventListener('click', async () => {
-			const text = document.getElementById('comment_text').value;
-			if (text) {
-				const turnstile = document.querySelector('[name="cf-turnstile-response"]').value;
-				await fetch('https://forums.armory3d.workers.dev/', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({
-						comment: text,
-						post_id: "luboslenco.com/0",
-						token: turnstile
-					})
-				});
-				document.getElementById('comment_text').value = '';
-			}
-		});
-	</script>
-
-	<script>
-		const POST_ID = "luboslenco.com/0";
-		const API_URL = 'https://forums.armory3d.workers.dev/';
-		async function load_comments() {
-			const response = await fetch(`${API_URL}?post_id=${POST_ID}`);
-			const comments = await response.json();
-			const container = document.getElementById('comments_list');
-			container.innerHTML = comments.map(c => `
-				<div style="border-bottom: 1px solid #333; padding: 10px 0;">
-					<small style="color: #666;">${new Date(c.created_at).toLocaleString()}</small>
-					<p style="margin: 5px 0;">${c.content}</p>
-				</div>
-			`).join('') || "No comments.";
-		}
-		load_comments();
-	</script>
-
-	<script>
-		document.getElementById('toggle_comments').addEventListener('click', function() {
-			const wrapper = document.getElementById('comment_wrapper');
-			if (wrapper.style.display === 'none') {
-				wrapper.style.display = 'block';
-			}
-			else {
-				wrapper.style.display = 'none';
-			}
-		});
-	</script>
 
 </body>
 </html>

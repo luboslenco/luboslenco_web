@@ -40,6 +40,37 @@
 		button:hover {
 			background-color: #333;
 		}
+
+
+		.post {
+			border-radius: 8px;
+			padding: 20px;
+			margin-bottom: 15px;
+			box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+		}
+
+		.post-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 15px;
+			padding-bottom: 10px;
+		}
+
+		.post-date {
+			color: #666;
+			font-size: 0.9em;
+		}
+
+		.post-content {
+			line-height: 1.6;
+			color: #333;
+		}
+
+		.post-content img {
+			max-width: 100%;
+			height: auto;
+		}
 	</style>
 	<script src="https://forums.armorpaint.org/javascripts/embed-topics.js"></script>
 </head>
@@ -68,9 +99,39 @@
 		<a href="https://luboslenco.com/rss.xml" target="_blank"><button type="button">RSS</button></a>
 	</div>
 
-	<div style="background-color: #000;">
-		<d-topics-list discourse-url="https://forums.armorpaint.org" category="releases" per-page="5"></d-topics-list>
-	</div>
+
+	<div id="posts-container"></div>
+	<script>
+		const DISCOURSE_URL = 'https://forums.armorpaint.org';
+		const TOPIC_ID = 60;
+		async function load_topic() {
+			const response = await fetch(`${DISCOURSE_URL}/t/${TOPIC_ID}.json`);
+			const data = await response.json();
+			const posts = data.post_stream.posts.reverse();
+			const container = document.getElementById('posts-container');
+			container.innerHTML = '';
+			posts.forEach(post => {
+				const postDiv = document.createElement('div');
+				postDiv.className = 'post';
+				const postDate = new Date(post.created_at);
+				const formattedDate = postDate.toLocaleDateString('en-US', {
+					year: 'numeric',
+					month: 'short',
+					day: 'numeric',
+					hour: '2-digit',
+					minute: '2-digit'
+				});
+				postDiv.innerHTML = `
+					<div class="post-header">
+					<div class="post-date">${formattedDate}</div>
+					</div>
+					<div class="post-content">${post.cooked}</div>
+				`;
+				container.appendChild(postDiv);
+			});
+		}
+		load_topic();
+	</script>
 
 </body>
 </html>
